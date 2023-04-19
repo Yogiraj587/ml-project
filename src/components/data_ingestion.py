@@ -1,30 +1,30 @@
-# Data ingestion is the process of collecting data
 import os
 import sys
-from src.exception import CustomException 
-from src.logger import logging
+sys.path.insert(0,"C:/Users/Yogiraj/VSCode/ml-project/src")
+from exception import CustomException
+from logger import logging
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
 
 @dataclass
 class DataIngestionConfig:
-    train_data_path: str = os.path.join('artifacts','train.csv')
-    test_data_path: str = os.path.join('artifacts','test.csv')
-    raw_data_path: str = os.path.join('artifacts','data.csv')
+  train_data_path: str = os.path.join('artifacts','train.csv')
+  test_data_path: str = os.path.join('artifacts','test.csv')
+  raw_data_path: str = os.path.join('artifacts','raw.csv')
 
 class DataIngestion:
     def __init__(self):
-        self.ingestion_config = DataIngestionConfig()
+      self.ingestion_config = DataIngestionConfig()
 
     def initiate_data_ingestion(self):
       logging.info("Entered the data ingestion")
       try:
-        df = pd.read_csv("notebook/data/stud.csv")
+        df = pd.read_csv("C:/Users/Yogiraj/VSCode/ml-project/notebook/data/stud.csv")
         logging.info('Read the dataset as dataframe')
         os.makedirs(os.path.dirname(self.ingestion_config.train_data_path),exist_ok=True)
 
-        df.to_csv(self.ingestion_config.train_data_path,index=False,header=True)
+        df.to_csv(self.ingestion_config.raw_data_path,index=False,header=True)
 
         logging.info("Train Test split initialised")
         train_set,test_set = train_test_split(df,test_size=0.2,random_state=0)
@@ -34,10 +34,10 @@ class DataIngestion:
 
         logging.info("Ingestion of the data is completed")
 
-        return{
-           self.ingestion.config_train_data_path,
+        return(
+           self.ingestion_config.train_data_path,
            self.ingestion_config.test_data_path
-        }
+        )
       except Exception as e:
         raise CustomException(e, sys)
       
